@@ -62,7 +62,7 @@ async def view_user(user_id: str):
         "fullname": user.get("fullname"),
         "location": user.get("location"),
         "description": user.get("description"),
-        "age": user.get('age'),
+        "age": int(user.get('age')),
     }
     return JSONResponse(content={"userdata": userdata}, status_code=200)
 
