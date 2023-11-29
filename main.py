@@ -1,5 +1,6 @@
 
 
+import math
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import uvicorn
@@ -60,7 +61,7 @@ async def view_user(user_id: str):
     userdata = {
         "username": user.get("username"),
         "fullname": user.get("fullname"),
-        "location": user.get("location"),
+        "location": user.get("location") if not math.isnan(user.get("location")) else None,
         "description": user.get("description"),
         "age": int(user.get('age')) if user.get('age') is not None else None,
     }
