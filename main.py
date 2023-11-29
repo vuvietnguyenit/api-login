@@ -52,7 +52,7 @@ async def register(user: User):
         return JSONResponse(content={"message": str(ex)}, status_code=400)
 
 
-@app.get("/user/{user_id}")
+@app.get("/user")
 async def view_user(user_id: str):
     if not user_id:
         return JSONResponse(content={"message": "user_id is not empty"}, status_code=401)
@@ -62,7 +62,7 @@ async def view_user(user_id: str):
         "fullname": user.get("fullname"),
         "location": user.get("location"),
         "description": user.get("description"),
-        "age": int(user.get('age')),
+        "age": int(user.get('age')) if user.get('age') is not None else None,
     }
     return JSONResponse(content={"userdata": userdata}, status_code=200)
 
