@@ -61,7 +61,7 @@ async def view_user(user_id: str):
     userdata = {
         "username": user.get("username"),
         "fullname": user.get("fullname"),
-        "location": user.get("location") if not math.isnan(user.get("location")) else None,
+        "location": user.get("location"),
         "description": user.get("description"),
         "age": int(user.get('age')) if user.get('age') is not None else None,
     }
