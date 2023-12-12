@@ -1,6 +1,7 @@
-
-
 import math
+import random
+import time
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import uvicorn
@@ -9,12 +10,13 @@ from src.db import get_user, get_user_by_id, insert_user
 from src.schema import User, UserLogin
 from src.utils import hashmd5
 
-
 app = FastAPI()
 app.add_middleware(CORSMiddleware,
                    allow_origins=["*"],
                    allow_methods=["*"],
                    allow_headers=["*"])
+
+DURATION_LIST = [float(i) / 10 for i in range(10, 30)]
 
 
 @app.get("/ping")
@@ -41,14 +43,14 @@ async def register(user: User):
         password = hashmd5(user.password)
         userdata = {
             "username": user.username,
-            "password": user.password,
             "location": user.location,
             "description": user.description,
             "age": user.age,
             "password": password
         }
         insert_user(user=userdata)
-        return JSONResponse(content={"message": f"Create user with username: {user.username} successful"}, status_code=201)
+        return JSONResponse(content={"message": f"Create user with username: {user.username} successful"},
+                            status_code=201)
     except Exception as ex:
         return JSONResponse(content={"message": str(ex)}, status_code=400)
 
@@ -66,6 +68,13 @@ async def view_user(user_id: str):
         "age": int(user.get('age')) if user.get('age') is not None else None,
     }
     return JSONResponse(content={"userdata": userdata}, status_code=200)
+
+
+@app.get("/users")
+async def list_user():
+    duration = random.choice(DURATION_LIST)
+    time.sleep(duration)
+    return JSONResponse(content={"userdata": []}, status_code=200)
 
 
 @app.post("/delete_user")
